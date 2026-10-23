@@ -1,0 +1,17 @@
+{
+  "name": "griddle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd client &amp;&amp; npm run serve", 
+    "server": "cd server &amp;&amp; npm run dev", 
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"" 
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
