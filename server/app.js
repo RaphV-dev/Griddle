@@ -18,6 +18,7 @@ app.use(cors());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
 
+app.use('/api/auth', authRoutes)
 
 // Route de test [28] 
 app.get('/api/health', (req, res) => { 
