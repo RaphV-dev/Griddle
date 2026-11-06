@@ -26,7 +26,7 @@ exports.register = async (req,res) =>{
             'INSERT INTO users (username, email, password, role) VALUES ( ?, ?, ?, ?)',[username,email,hashePassword, 'player']
         );
 
-        res.status.json({
+        res.status(201).json({
             message : 'Account created succesfully',
             userId : result.insertId
         });

@@ -12,7 +12,7 @@
         <router-link v-if="isLoggedIn" to="/profile">Profile</router-link>
 
         <template v-if="isLoggedIn">
-            <route-link to="/login">Log In</route-link>
+            <router-link to="/login">Log In</router-link>
             <router-link to="/register" class="btn-register">Register</router-link>
         </template>
 
@@ -28,7 +28,7 @@
     const isLoggedIn = ref(false);
 
     const checkAuth = () =>{
-        isLoggedIn.value = !!localStorage.getItem('token');
+        isLoggedIn.value = !localStorage.getItem('token');
     };
 
     watchEffect(()=>{
