@@ -49,7 +49,7 @@ exports.login = async (req,res) =>{
             return res.status(401).json({message: 'Incorrect credentials'})
         }
 
-        const user = users;
+        const user = users[0];
 
         const token = jwt.sign(
             {id: user.id, username: user.username, role: user.role},
