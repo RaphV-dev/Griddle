@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const gameController = require('../controllers/gameController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const {verifyToken, optionalAuth} = require('../middlewares/authMiddleware')
 
 router.get('/drivers', gameController.getAllDrivers);
-router.get('/today', authMiddleware.optionalAuth, gameController.getTodayChallenge);
+router.get('/today', optionalAuth, gameController.getTodayChallenge);
 
-router.post('/guess', authMiddleware.verifyToken, gameController.validateGuess);
-router.post('/submit', authMiddleware.verifyToken, gameController.submitDetailyResults);
+router.post('/guess', verifyToken, gameController.validateGuess);
+router.post('/submit', verifyToken, gameController.submitDetailyResults);
 
 module.exports = router;
