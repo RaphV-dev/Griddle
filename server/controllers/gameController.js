@@ -1,4 +1,3 @@
-const { use } = require('react');
 const db = require('../config/db');
 
 exports.getAllDrivers = async (req,res) =>{
@@ -6,7 +5,7 @@ exports.getAllDrivers = async (req,res) =>{
         const [drivers] = await db.query(
             'SELECT id,name,code FROM drivers ORDER BY name ASC'
         );
-        return res.status(200).jsoon({drivers});
+        return res.status(200).json({drivers});
     }catch(error){
         console.error('Error fetching driver list:', error);
         return res.status(500).json({message: 'Internal server error'});
@@ -51,8 +50,8 @@ exports.getTodayChallenge = async (req,res) => {
 
         const currentChallenge = challenges[0];
 
-        const[[readDriverData]] = await db.query(
-            'SELECT clue_1, clue2, clue_3 FROM drivers WHERE id = ?',
+        const [[readDriverData]] = await db.query(
+            'SELECT clue_1, clue_2, clue_3 FROM drivers WHERE id = ?',
             [currentChallenge.read_driver_id]
         );
 
@@ -79,7 +78,7 @@ exports.getTodayChallenge = async (req,res) => {
                 [userId, today]
             );
             if(results.length > 0){
-                userResult = res[0];
+                userResult = results[0];
             }
         }
 
@@ -159,7 +158,7 @@ exports.validateGuess = async (req,res) => {
                 'SELECT id, name, code, nattionality FROM drivers WHERE id = ?',
                 [targetDriverId]
             );
-            targetDriver = driver
+            targetDriver = drivers[0] || null;
         }
 
         return res.status(200).json({
@@ -173,7 +172,7 @@ exports.validateGuess = async (req,res) => {
     }
 };
 
-exports.submitDetailyResults = async (req,res) => {
+exports.submitDailyResults = async (req,res) => {
     try{
         const userId = req.user.id;
         const {readScore, rebusScore, zoomScore, teamScore} = req.body;

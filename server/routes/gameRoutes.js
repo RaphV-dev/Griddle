@@ -7,6 +7,6 @@ router.get('/drivers', gameController.getAllDrivers);
 router.get('/today', optionalAuth, gameController.getTodayChallenge);
 
 router.post('/guess', verifyToken, gameController.validateGuess);
-router.post('/submit', verifyToken, gameController.submitDetailyResults);
+router.post('/submit', verifyToken, gameController.submitDailyResults);
 
 module.exports = router;
