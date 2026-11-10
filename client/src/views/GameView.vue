@@ -36,8 +36,8 @@
     </div>
     <div v-else-if="challenge" class="active-game">
       <div class="game-stepper">
-        <div 
-          v-for="(gameKey, index) in gameTypes" 
+        <div
+          v-for="(gameKey, index) in gameTypes"
           :key="gameKey"
           :class="['step-item', { active: currentGameIndex === index, completed: gameStates[gameKey].completed }]"
         >
@@ -48,69 +48,29 @@
 
       <!-- Main Game Stage Card -->
       <div class="stage-card">
-        <!-- Game 1: Read the Driver -->
-        <div v-if="currentGameKey === 'read'" class="game-stage">
-          <h3>Mini-Game 1: Read the Driver</h3>
-          <p class="subtitle">Guess the driver based on these 3 clues!</p>
-          <div class="clues-list">
-            <div 
-              v-for="(clue, idx) in challenge.games.read.clues" 
-              :key="idx" 
-              :class="['clue-card', { revealed: gameStates.read.attempts > idx || gameStates.read.completed }]"
-            >
-              <span class="clue-badge">Clue #{{ idx + 1 }}</span>
-              <p v-if="gameStates.read.attempts > idx || gameStates.read.completed">{{ clue }}</p>
-              <p v-else class="hidden-clue">Make {{ idx }} wrong guess(es) to unlock</p>
-            </div>
-          </div>
-        </div>
+        <ReadDriverGame
+          v-if="currentGameKey === 'read'"
+          :clues="challenge.games.read.clues"
+          :attempts="gameStates.read.attempts"
+          :completed="gameStates.read.completed"
+        />
 
-        <!-- Game 2: Decode the Name (Rebus) -->
-        <div v-else-if="currentGameKey === 'rebus'" class="game-stage">
-          <h3>Mini-Game 2: Decode the Name</h3>
-          <p class="subtitle">Combine the elements below to reveal the driver's name!</p>
-          <div class="rebus-container">
-            <div 
-              v-for="elem in challenge.games.rebus.elements" 
-              :key="elem.element_order" 
-              class="rebus-item"
-            >
-              <img v-if="elem.type === 'image'" :src="elem.content" alt="Rebus part" class="rebus-img" />
-              <span v-else-if="elem.type === 'emoji'" class="rebus-emoji">{{ elem.content }}</span>
-              <span v-else class="rebus-text">{{ elem.content }}</span>
-            </div>
-          </div>
-        </div>
+        <RebusGame
+          v-else-if="currentGameKey === 'rebus'"
+          :elements="challenge.games.rebus.elements"
+        />
 
-        <!-- Game 3: Find the Face (Zoom) -->
-        <div v-else-if="currentGameKey === 'zoom'" class="game-stage">
-          <h3>Mini-Game 3: Find the Face</h3>
-          <p class="subtitle">The image unzooms with every incorrect attempt!</p>
-          <div class="zoom-viewport">
-            <img 
-              :src="challenge.games.zoom.imageUrl" 
-              alt="Zoomed driver" 
-              class="zoom-image"
-              :style="zoomStyle"
-            />
-          </div>
-        </div>
+        <ZoomGame
+          v-else-if="currentGameKey === 'zoom'"
+          :image-url="challenge.games.zoom.imageUrl"
+          :attempts="gameStates.zoom.attempts"
+          :completed="gameStates.zoom.completed"
+        />
 
-        <!-- Game 4: Follow the Team -->
-        <div v-else-if="currentGameKey === 'team'" class="game-stage">
-          <h3>Mini-Game 4: Follow the Team</h3>
-          <p class="subtitle">Chronological order of teams this driver raced for:</p>
-          <div class="teams-timeline">
-            <div 
-              v-for="team in challenge.games.team.teams" 
-              :key="team.team_order" 
-              class="team-card"
-            >
-              <img v-if="team.logo_url" :src="team.logo_url" :alt="team.team_name" class="team-logo" />
-              <span class="team-name">{{ team.team_name }}</span>
-            </div>
-          </div>
-        </div>
+        <TeamGame
+          v-else-if="currentGameKey === 'team'"
+          :teams="challenge.games.team.teams"
+        />
 
         <!-- Feedback & Guesses History -->
         <div v-if="gameStates[currentGameKey].guesses.length > 0" class="guesses-history">
@@ -125,16 +85,16 @@
         <!-- Search & Guess Form -->
         <div v-if="!gameStates[currentGameKey].completed" class="guess-section">
           <div class="search-box">
-            <input 
-              type="text" 
-              v-model="searchQuery" 
+            <input
+              type="text"
+              v-model="searchQuery"
               placeholder="Search driver by name or code..."
               @focus="showDropdown = true"
             />
             <div v-if="showDropdown && filteredDrivers.length > 0" class="dropdown">
-              <div 
-                v-for="driver in filteredDrivers" 
-                :key="driver.id" 
+              <div
+                v-for="driver in filteredDrivers"
+                :key="driver.id"
                 class="dropdown-item"
                 @click="selectDriver(driver)"
               >
@@ -170,7 +130,7 @@
 
         <div class="final-scores">
           <div>Read the driver: {{ gameStates.read.score }} pts</div>
-          <div>Dcode the name: {{ gameStates.rebus.score }} pts</div>
+          <div>Decode the name: {{ gameStates.rebus.score }} pts</div>
           <div>Find the face: {{ gameStates.zoom.score }} pts</div>
           <div>Follow the team: {{ gameStates.team.score }} pts</div>
         </div>
@@ -192,6 +152,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import ReadDriverGame from '../components/ReadTheDriver.vue';
+import RebusGame from '../components/DecodeTheName.vue';
+import ZoomGame from '../components/FindTheFace.vue';
+import TeamGame from '../components/FollowTheTeam.vue';
 
 const gameTypes = ['read', 'rebus', 'zoom', 'team'];
 const gameLabels = {
@@ -233,21 +197,6 @@ const filteredDrivers = computed(() => {
   return driversList.value.filter(
     d => d.name.toLowerCase().includes(query) || d.code.toLowerCase().includes(query)
   ).slice(0, 5);
-});
-
-// Progressive CSS Zoom calculation
-const zoomStyle = computed(() => {
-  const attempts = gameStates.value.zoom.attempts;
-  const isCompleted = gameStates.value.zoom.completed;
-  if (isCompleted) {
-    return { transform: 'scale(1)', transition: 'transform 0.5s ease' };
-  }
-  // Scales down from 3.5x to 1.0x over 5 attempts
-  const scaleFactor = Math.max(1, 3.5 - (attempts - 1) * 0.6);
-  return {
-    transform: `scale(${scaleFactor})`,
-    transition: 'transform 0.5s ease'
-  };
 });
 
 // Fetch driver list and daily challenge on mount
@@ -419,21 +368,6 @@ const submitFinalDailyScore = async () => {
   padding: 25px;
   color: black;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.zoom-viewport {
-  width: 250px;
-  height: 250px;
-  margin: 20px auto;
-  overflow: hidden;
-  border-radius: 50%;
-  border: 4px solid #e10600;
-}
-
-.zoom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .search-box {

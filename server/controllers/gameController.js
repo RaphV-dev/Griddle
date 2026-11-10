@@ -109,7 +109,7 @@ exports.getTodayChallenge = async (req,res) => {
 exports.validateGuess = async (req,res) => {
     try{
         const {gameType, guesseDriverId, attemptCount} = req.body;
-        const today = new Date().toISOString.split('T')[0];
+        const today = new Date().toISOString().split('T')[0];
 
         if (!gameType || !guesseDriverId){
             return res.status(400).json({message : 'Missing required parameters'});
@@ -176,7 +176,7 @@ exports.submitDailyResults = async (req,res) => {
     try{
         const userId = req.user.id;
         const {readScore, rebusScore, zoomScore, teamScore} = req.body;
-        const today = new Date().toISOString.split('T')[0];
+        const today = new Date().toISOString().split('T')[0];
 
         const totalScore = (readScore || 0) + (rebusScore || 0) +(zoomScore || 0) + (teamScore || 0);
 
