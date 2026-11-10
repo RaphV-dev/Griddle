@@ -417,6 +417,7 @@ const submitFinalDailyScore = async () => {
   background: #ffffff;
   border-radius: 12px;
   padding: 25px;
+  color: black;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
