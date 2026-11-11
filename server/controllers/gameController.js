@@ -14,7 +14,7 @@ exports.getAllDrivers = async (req,res) =>{
 
 exports.getTodayChallenge = async (req,res) => {
     try{
-        const userId = req.user ? req.userId : null;
+        const userId = req.user ? req.user.id : null;
         const today = new Date().toISOString().split('T')[0];
 
         let [challenges] = await db.query(
@@ -108,10 +108,10 @@ exports.getTodayChallenge = async (req,res) => {
 
 exports.validateGuess = async (req,res) => {
     try{
-        const {gameType, guesseDriverId, attemptCount} = req.body;
+        const {gameType, guessedDriverId, attemptsCount} = req.body;
         const today = new Date().toISOString().split('T')[0];
 
-        if (!gameType || !guesseDriverId){
+        if (!gameType || !guessedDriverId){
             return res.status(400).json({message : 'Missing required parameters'});
         }
 
@@ -144,21 +144,21 @@ exports.validateGuess = async (req,res) => {
                 return res.status(400).json({message: 'Invalid game type'});
         }
 
-        const isCorrect = Number(guesseDriverId) === Number(targetDriverId);
+        const isCorrect = Number(guessedDriverId) === Number(targetDriverId);
 
         let score = 0;
         if(isCorrect){
-            const attempts = attemptCount || 1;
+            const attempts = attemptsCount || 1;
             score = Math.max(0, 100-(attempts-1)*15);
         }
 
         let targetDriver = null;
         if(isCorrect){
             const [[driver]] = await db.query(
-                'SELECT id, name, code, nattionality FROM drivers WHERE id = ?',
+                'SELECT id, name, code, nationality FROM drivers WHERE id = ?',
                 [targetDriverId]
             );
-            targetDriver = drivers[0] || null;
+            targetDriver = driver[0] || null;
         }
 
         return res.status(200).json({
@@ -182,7 +182,7 @@ exports.submitDailyResults = async (req,res) => {
 
 
         await db.query(
-            'INSERT INTO user_daily_results (user_id, challenge_date, read_score, rebus_score, zoom_score, team_score, total_score, completed) VALUES (?, ?, ?, ?, ?, ?, ?, TRUE) ON DUPLICATE KEY UPDATE read_score = VALUES(read_score), rebus_score = VALUES(rebus_score), zoom_score = VALUES(zoom_score), team_score = VALUES(team_score, total_score = VALUES(total_score), completed = TRUE',
+            'INSERT INTO user_daily_results (user_id, challenge_date, read_score, rebus_score, zoom_score, team_score, total_score, completed) VALUES (?, ?, ?, ?, ?, ?, ?, TRUE) ON DUPLICATE KEY UPDATE read_score = VALUES(read_score), rebus_score = VALUES(rebus_score), zoom_score = VALUES(zoom_score), team_score = VALUES(team_score), total_score = VALUES(total_score), completed = TRUE',
             [userId, today, readScore || 0, rebusScore || 0, zoomScore || 0, teamScore || 0, totalScore]
         );
 

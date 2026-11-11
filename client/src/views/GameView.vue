@@ -429,6 +429,7 @@ const submitFinalDailyScore = async () => {
 
 .modal-card {
   background: white;
+  color: black;
   padding: 30px;
   border-radius: 12px;
   text-align: center;
