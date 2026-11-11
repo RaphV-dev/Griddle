@@ -123,30 +123,17 @@
     </div>
 
     <!-- Final Recap Modal / End Screen -->
-    <div v-if="showSummaryModal" class="modal-overlay">
-      <div class="modal-card">
-        <h2>Daily Challenge Complete!</h2>
-        <p>Great job! Here is your breakdown for today:</p>
-
-        <div class="final-scores">
-          <div>Read the driver: {{ gameStates.read.score }} pts</div>
-          <div>Decode the name: {{ gameStates.rebus.score }} pts</div>
-          <div>Find the face: {{ gameStates.zoom.score }} pts</div>
-          <div>Follow the team: {{ gameStates.team.score }} pts</div>
-        </div>
-
-        <div class="final-total">
-          Total Score: <span>{{ summaryData?.totalScore }} / 400</span>
-        </div>
-
-        <div v-if="summaryData" class="user-stats-summary">
-          <p>Current Streak: <strong>{{ summaryData.currentStreak }} days</strong></p>
-          <p>Best Score: <strong>{{ summaryData.bestScore }} pts</strong></p>
-        </div>
-
-        <button @click="showSummaryModal = false" class="btn-close">Close</button>
-      </div>
-    </div>
+    <ScoreRecap
+      v-if="showSummaryModal"
+      :scores="{
+        read: gameStates.read.score,
+        rebus: gameStates.rebus.score,
+        zoom: gameStates.zoom.score,
+        team: gameStates.team.score
+      }"
+      :summary="summaryData"
+      @close="showSummaryModal = false"
+    />
   </div>
 </template>
 
@@ -156,6 +143,7 @@ import ReadDriverGame from '../components/ReadTheDriver.vue';
 import RebusGame from '../components/DecodeTheName.vue';
 import ZoomGame from '../components/FindTheFace.vue';
 import TeamGame from '../components/FollowTheTeam.vue';
+import ScoreRecap from '../components/ScoreRecap.vue';
 
 const gameTypes = ['read', 'rebus', 'zoom', 'team'];
 const gameLabels = {
@@ -415,25 +403,4 @@ const submitFinalDailyScore = async () => {
   margin-top: 15px;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-card {
-  background: white;
-  color: black;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-}
 </style>
