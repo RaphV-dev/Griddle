@@ -132,7 +132,7 @@
         team: gameStates.team.score
       }"
       :summary="summaryData"
-      @close="showSummaryModal = false"
+      @close="closeSummary"
     />
   </div>
 </template>
@@ -309,11 +309,23 @@ const submitFinalDailyScore = async () => {
     const data = await res.json();
     if (res.ok) {
       summaryData.value = data.summary;
+      todayResult.value = {
+        read_score: gameStates.value.read.score,
+        rebus_score: gameStates.value.rebus.score,
+        zoom_score: gameStates.value.zoom.score,
+        team_score: gameStates.value.team.score,
+        total_score: data.summary.totalScore
+      }
       showSummaryModal.value = true;
     }
   } catch (err) {
     console.error('Error submitting daily score:', err);
   }
+};
+
+const closeSummary = () => {
+  showSummaryModal.value = false;
+  alreadyPlayed.value = true;
 };
 </script>
 

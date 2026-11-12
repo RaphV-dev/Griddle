@@ -196,9 +196,10 @@ exports.submitDailyResults = async (req,res) => {
 
         if (stats.length > 0){
             const userStat = stats[0];
+            const prevAvg = Number(userStat.average_score) || 0; 
             gamesPlayed = userStat.games_played +1;
             bestScore = Math.max(userStat.best_score, totalScore);
-            averageScore = ((userStat.averageScore * userStat.games_played)+totalScore)/gamesPlayed;
+            averageScore = ((prevAvg * userStat.games_played)+totalScore)/gamesPlayed;
             
             const lastPlayed = userStat.last_played_date ? new Date(userStat.last_played_date):null;
             const yesterday = new Date();
