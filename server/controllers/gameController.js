@@ -158,7 +158,7 @@ exports.validateGuess = async (req,res) => {
                 'SELECT id, name, code, nationality FROM drivers WHERE id = ?',
                 [targetDriverId]
             );
-            targetDriver = driver[0] || null;
+            targetDriver = driver || null;
         }
 
         return res.status(200).json({
@@ -177,6 +177,13 @@ exports.submitDailyResults = async (req,res) => {
         const userId = req.user.id;
         const {readScore, rebusScore, zoomScore, teamScore} = req.body;
         const today = new Date().toISOString().split('T')[0];
+        const [[existing]] = await db.query(
+            'SELECT completed FROM user_daily_results WHERE user_id = ? AND challenge_date = ?',
+            [userId, today]
+        );
+        if (existing && existing.completed) {
+            return res.status(409).json({ message: 'Daily challenge already submitted.' });
+        }
 
         const totalScore = (readScore || 0) + (rebusScore || 0) +(zoomScore || 0) + (teamScore || 0);
 
@@ -201,11 +208,17 @@ exports.submitDailyResults = async (req,res) => {
             bestScore = Math.max(userStat.best_score, totalScore);
             averageScore = ((prevAvg * userStat.games_played)+totalScore)/gamesPlayed;
             
-            const lastPlayed = userStat.last_played_date ? new Date(userStat.last_played_date):null;
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate()-1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
-            const lastPlayedStr = lastPlayed ? lastPlayed.toISOString().split('T')[0]:null;
+            const [stats] = await db.query(
+                `SELECT games_played, best_score, average_score, current_streak, max_streak,
+                        DATE_FORMAT(last_played_date, '%Y-%m-%d') AS last_played_date
+                FROM user_stats WHERE user_id = ?`,
+                [userId]
+            );
+            const lastPlayedStr = userStat.last_played_date; 
+            const yesterdayDate = new Date(today + 'T00:00:00Z');
+            yesterdayDate.setUTCDate(yesterdayDate.getUTCDate() - 1);
+            const yesterdayStr = yesterdayDate.toISOString().split('T')[0];
+            
 
             if (lastPlayedStr === yesterdayStr){
                 currentStreak = userStat.current_streak + 1;
