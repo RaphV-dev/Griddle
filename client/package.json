@@ -10,7 +10,8 @@
   "dependencies": {
     "axios": "^1.20.0",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -24,7 +25,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "vue/setup-compiler-macros": true
     },
     "extends": [
       "plugin:vue/vue3-essential",
