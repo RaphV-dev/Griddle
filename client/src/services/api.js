@@ -18,4 +18,7 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+export const getDashboard = () => api.get('/users/dashboard');
+export const changePassword = (payload) => api.put('/users/password', payload);
+
 export default api;
