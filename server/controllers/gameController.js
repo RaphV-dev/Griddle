@@ -202,18 +202,19 @@ exports.submitDailyResults = async (req,res) => {
         let maxStreak = 1;
 
         if (stats.length > 0){
-            const userStat = stats[0];
-            const prevAvg = Number(userStat.average_score) || 0; 
-            gamesPlayed = userStat.games_played +1;
-            bestScore = Math.max(userStat.best_score, totalScore);
-            averageScore = ((prevAvg * userStat.games_played)+totalScore)/gamesPlayed;
-            
             const [stats] = await db.query(
                 `SELECT games_played, best_score, average_score, current_streak, max_streak,
                         DATE_FORMAT(last_played_date, '%Y-%m-%d') AS last_played_date
                 FROM user_stats WHERE user_id = ?`,
                 [userId]
             );
+            const userStat = stats[0];
+            const prevAvg = Number(userStat.average_score) || 0; 
+            gamesPlayed = userStat.games_played +1;
+            bestScore = Math.max(userStat.best_score, totalScore);
+            averageScore = ((prevAvg * userStat.games_played)+totalScore)/gamesPlayed;
+            
+            
             const lastPlayedStr = userStat.last_played_date; 
             const yesterdayDate = new Date(today + 'T00:00:00Z');
             yesterdayDate.setUTCDate(yesterdayDate.getUTCDate() - 1);

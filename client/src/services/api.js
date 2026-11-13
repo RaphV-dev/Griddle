@@ -20,5 +20,8 @@ api.interceptors.request.use(
 
 export const getDashboard = () => api.get('/users/dashboard');
 export const changePassword = (payload) => api.put('/users/password', payload);
+export const getAdminDashboard = () => api.get('/admin/dashboard');
+export const deleteUserAccount = (userId) => api.delete(`/admin/users/${userId}`);
+export const deleteUserDailyTry = (userId) => api.delete(`/admin/users/${userId}/daily-try`);
 
 export default api;
