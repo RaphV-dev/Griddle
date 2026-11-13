@@ -8,6 +8,7 @@ const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express(); 
 const PORT = process.env.PORT || 3000; 
@@ -25,6 +26,8 @@ app.use('/api/auth', authRoutes)
 app.use('/api/game',gameRoutes);
 //User profile
 app.use('/api/users', userRoutes);
+//Admin
+app.use('/api/admin', adminRoutes);
 
 
 app.get('/api/health', (req, res) => { 
