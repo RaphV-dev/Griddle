@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="logo">
             <router-link to="/">
-            <strong>GRID IQ</strong>
+            <strong>GridDle</strong>
         </router-link>
         </div>
         <div class="nav_links">
