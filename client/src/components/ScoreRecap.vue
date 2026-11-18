@@ -43,59 +43,56 @@ defineEmits(['close']);
 <style scoped>
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  padding: 16px;
-  overflow-y: auto;
+  inset: 0;
   z-index: 1000;
+  display: flex;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.78);
+  backdrop-filter: blur(8px);
 }
-
-/* margin:auto centre la carte tout en gardant le haut accessible si elle dépasse l'écran */
 .modal-card {
-  background: white;
-  color: black;
-  margin: auto;
-  padding: 24px 20px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 400px;
   width: 100%;
+  max-width: 520px;
+  margin: auto;
+  padding: 32px;
+  border: 1px solid #3a3b40;
+  border-radius: 10px;
+  background: #191a1d;
+  color: #f4f4f1;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45);
 }
-
-.final-scores {
-  display: grid;
-  gap: 6px;
-  margin: 16px 0;
-  text-align: left;
+.modal-card h2 {
+  margin: 0 0 10px;
+  color: #f4f4f1;
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: 2.6rem;
+  line-height: 1;
+  text-transform: uppercase;
 }
-
-.final-total {
-  font-weight: bold;
-  font-size: 1.15rem;
-}
-
-.final-total span {
-  color: #e10600;
-}
-
-.user-stats-summary p {
-  margin: 4px 0;
-}
-
+.modal-card > p { color: #929399; line-height: 1.5; }
+.final-scores { display: grid; gap: 0; margin: 24px 0; text-align: left; }
+.final-scores > div { padding: 13px 0; border-bottom: 1px solid #343539; color: #c2c3c5; }
+.final-total { font-family: var(--font-display, Impact, sans-serif); font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.final-total span { color: var(--color-acid, #d8f35a); }
+.user-stats-summary { margin-top: 18px; padding: 14px; border: 1px solid #343539; border-radius: 6px; background: #141517; }
+.user-stats-summary p { margin: 5px 0; color: #929399; }
+.user-stats-summary strong { color: #f4f4f1; }
 .btn-close {
   width: 100%;
-  min-height: 44px;
-  margin-top: 16px;
+  min-height: 48px;
+  margin-top: 22px;
   padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  background: #e10600;
+  border: 1px solid var(--color-red, #f23b35);
+  border-radius: 5px;
+  background: var(--color-red, #f23b35);
   color: white;
-  font-weight: bold;
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
   cursor: pointer;
 }
+@media (max-width: 480px) { .modal-card { padding: 24px 18px; } }
 </style>
