@@ -25,41 +25,31 @@ defineProps({
 </script>
 
 <style scoped>
-.clues-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.clue-card {
-  padding: 12px;
-  border: 1px dashed #bbb;
-  border-radius: 8px;
-  background: #f5f5f5;
-  color: #777;
-}
-
-.clue-card.revealed {
-  border: 1px solid #e10600;
-  background: #fff5f5;
-  color: #111;
-}
-
-.clue-card p {
-  margin: 6px 0 0;
-}
-
-.clue-badge {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: bold;
+.game-stage h3 {
+  margin: 0 0 8px;
+  color: #f4f4f1;
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
   text-transform: uppercase;
-  color: #e10600;
 }
-
-.hidden-clue {
-  font-style: italic;
-  color: #888;
+.game-stage .subtitle { margin: 0; color: #929399; font-size: 0.95rem; }
+.clues-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 30px 0 10px; }
+.clue-card {
+  display: flex;
+  min-height: 150px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  border: 1px dashed #45464a;
+  border-radius: 7px;
+  background: #151619;
+  color: #777980;
 }
+.clue-card.revealed { border: 1px solid rgba(242,59,53,0.7); background: rgba(242,59,53,0.07); color: #f4f4f1; }
+.clue-card p { margin: 18px 0 0; font-size: 1rem; line-height: 1.5; }
+.clue-badge { color: var(--color-red, #f23b35); font-family: var(--font-mono, monospace); font-size: 0.66rem; font-weight: 600; text-transform: uppercase; }
+.hidden-clue { color: #777980; font-style: italic; }
+@media (max-width: 760px) { .clues-list { grid-template-columns: 1fr; gap: 9px; margin-top: 20px; } .clue-card { min-height: 0; padding: 14px; } .clue-card p { margin-top: 10px; } }
 </style>
