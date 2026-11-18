@@ -101,7 +101,21 @@
                 @mousedown.prevent
                 @click="selectDriver(driver)"
               >
-                <strong>{{ driver.name }}</strong> ({{ driver.code }})
+                <img
+                  v-if="driver.zoom_image_url"
+                  :src="driver.zoom_image_url"
+                  :alt="driver.name"
+                  class="driver-avatar"
+                  loading="lazy"
+                  @error="$event.target.style.display = 'none'"
+                />
+                <div v-else class="driver-avatar-fallback" aria-hidden="true">
+                  {{ driver.code?.slice(0, 1) || '?' }}
+                </div>
+                <div class="driver-option-info">
+                  <strong>{{ driver.name }}</strong>
+                  <span>{{ driver.code }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -432,16 +446,42 @@ const closeSummary = () => {
 }
 .dropdown-item {
   display: flex;
-  min-height: 48px;
+  min-height: 68px;
   align-items: center;
-  padding: 10px 16px;
+  gap: 13px;
+  padding: 9px 14px;
   border-bottom: 1px solid #303135;
   color: #e8e8e5;
   cursor: pointer;
+  transition: background 140ms ease;
 }
 .dropdown-item:last-child { border-bottom: 0; }
 .dropdown-item:hover { background: #2a2b2f; }
-.dropdown-item strong { margin-right: 5px; color: white; }
+.driver-avatar, .driver-avatar-fallback {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  overflow: hidden;
+  border: 1px solid #45464a;
+  border-radius: 6px;
+  background: #101113;
+}
+.driver-avatar { object-fit: cover; object-position: center 25%; }
+.driver-avatar-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--color-acid, #d8f35a);
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: 1.25rem;
+}
+.driver-option-info { display: flex; min-width: 0; flex-direction: column; gap: 4px; }
+.driver-option-info strong { color: white; font-size: .92rem; font-weight: 650; }
+.driver-option-info span {
+  color: #929399;
+  font-family: var(--font-mono, monospace);
+  font-size: .64rem;
+  letter-spacing: .04em;
+}
 .btn-submit, .btn-next, .btn-retry {
   min-height: 46px;
   margin-top: 15px;
