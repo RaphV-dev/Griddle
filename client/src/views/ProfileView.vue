@@ -187,9 +187,16 @@ onMounted(loadDashboard);
 <style scoped>
 .profile {
     max-width: 600px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin: 1rem auto;
+    padding: 0;
     color: #fff;
+}
+
+@media (min-width: 600px) {
+    .profile {
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
 }
 
 .profile h1 {
@@ -199,7 +206,7 @@ onMounted(loadDashboard);
 .card {
     background: #20202a;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1rem;
     margin-bottom: 1.5rem;
 }
 
@@ -228,6 +235,7 @@ onMounted(loadDashboard);
 .account-info li {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     padding: 0.5rem 0;
     border-bottom: 1px solid #333;
 }
@@ -239,6 +247,13 @@ onMounted(loadDashboard);
 }
 
 .account-info span { color: #aaa; }
+
+/* Un e-mail long doit passer à la ligne au lieu de pousser la page en largeur */
+.account-info strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: right;
+}
 
 .stats-grid {
     display: grid;
@@ -291,6 +306,7 @@ onMounted(loadDashboard);
 .btn-secondary,
 .btn-logout {
     display: inline-block;
+    min-height: 44px;
     padding: 0.7rem 1.2rem;
     border-radius: 4px;
     cursor: pointer;

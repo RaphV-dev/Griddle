@@ -37,8 +37,8 @@ const zoomStyle = computed(() => {
 
 <style scoped>
 .zoom-viewport {
-  width: 250px;
-  height: 250px;
+  width: min(250px, 100%);
+  aspect-ratio: 1 / 1;
   margin: 20px auto;
   overflow: hidden;
   border-radius: 50%;

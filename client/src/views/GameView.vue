@@ -89,13 +89,16 @@
               type="text"
               v-model="searchQuery"
               placeholder="Search driver by name or code..."
+              autocomplete="off"
               @focus="showDropdown = true"
+              @blur="showDropdown = false"
             />
             <div v-if="showDropdown && filteredDrivers.length > 0" class="dropdown">
               <div
                 v-for="driver in filteredDrivers"
                 :key="driver.id"
                 class="dropdown-item"
+                @mousedown.prevent
                 @click="selectDriver(driver)"
               >
                 <strong>{{ driver.name }}</strong> ({{ driver.code }})
@@ -333,20 +336,23 @@ const closeSummary = () => {
 .game-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 4px;
 }
 
 .game-stepper {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
 .step-item {
   flex: 1;
+  min-width: 0;
   text-align: center;
-  padding: 10px;
+  padding: 8px 2px;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
   border-bottom: 3px solid #ccc;
   color: #777;
 }
@@ -365,7 +371,7 @@ const closeSummary = () => {
 .stage-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 25px;
+  padding: 16px;
   color: black;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -396,7 +402,10 @@ const closeSummary = () => {
 }
 
 .dropdown-item {
-  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 15px;
   cursor: pointer;
 }
 
@@ -404,15 +413,176 @@ const closeSummary = () => {
   background: #f5f5f5;
 }
 
-.btn-submit, .btn-next {
+.btn-submit, .btn-next, .btn-retry {
   background: #e10600;
   color: white;
   border: none;
+  min-height: 44px;
   padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   margin-top: 15px;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* États de chargement / erreur / déjà joué */
+.loading-state, .error-card, .already-played-card {
+  background: #20202a;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.error-card h2 {
+  margin-top: 0;
+  color: #ff4d4d;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 12px;
+  border: 4px solid #333;
+  border-top-color: #e10600;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.summary-box {
+  margin-top: 16px;
+  padding: 16px;
+  background: #15151e;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.summary-box h3 {
+  margin: 0 0 8px;
+}
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}
+
+.total-score {
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: right;
+}
+
+.total-score span {
+  color: #e10600;
+}
+
+/* Historique des essais et résultat d'une étape */
+.guesses-history {
+  margin-top: 16px;
+}
+
+.guesses-history h4 {
+  margin: 0 0 8px;
+}
+
+.guesses-history ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wrong-guess {
+  padding: 6px 0;
+  color: #c62828;
+}
+
+.selected-badge {
+  margin-top: 12px;
+}
+
+.selected-badge .btn-submit {
+  display: block;
+  width: 100%;
+}
+
+.stage-success {
+  margin-top: 16px;
+  padding: 16px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  color: #1b5e20;
+  text-align: center;
+}
+
+.stage-success h4 {
+  margin: 0 0 8px;
+}
+
+.stage-success .btn-next {
+  width: 100%;
+}
+
+/* Tablette et + : on retrouve les espacements larges */
+@media (min-width: 600px) {
+  .game-container {
+    padding: 20px;
+  }
+
+  .game-stepper {
+    margin-bottom: 25px;
+  }
+
+  .step-item {
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .stage-card {
+    padding: 25px;
+  }
+
+  .scores-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+  }
+
+  .selected-badge .btn-submit,
+  .stage-success .btn-next {
+    display: inline-block;
+    width: auto;
+  }
+}
+
+/* Mobile : les suggestions s'ouvrent au-dessus du champ pour rester visibles
+   quand le clavier virtuel occupe le bas de l'écran */
+@media (max-width: 599px) {
+  .step-number {
+    display: none;
+  }
+
+  .dropdown {
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 4px;
+  }
 }
 
 </style>
