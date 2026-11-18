@@ -68,7 +68,7 @@
     </section>
 
     <footer class="home-footer">
-      <span>GRID IQ / PLAY</span>
+      <span>GridDle / PLAY</span>
       <span>FOUR GAME TYPES. ONE GRID.</span>
     </footer>
   </div>
