@@ -65,8 +65,8 @@ exports.getTodayChallenge = async (req,res) => {
             [currentChallenge.zoom_driver_id]
         );
 
-        const [teamHistory] = await db.query(
-            'SELECT dt.team_order, t.name AS team_name, t.logo_url FROM driver_teams dt JOIN teams t ON dt.team_id = t.id WHERE dt.driver_id = ? ORDER BY dt.team_order ASC',
+        const [[teamDriverData]] = await db.query(
+            'SELECT teams_image_url FROM drivers WHERE id = ?',
             [currentChallenge.team_driver_id]
         );
 
@@ -96,7 +96,7 @@ exports.getTodayChallenge = async (req,res) => {
                     imageUrl: zoomDriverData ? zoomDriverData.zoom_image_url : null
                 },
                 team: {
-                    teams : teamHistory
+                    imageUrl: teamDriverData ? teamDriverData.teams_image_url : null
                 }
             }
         });
