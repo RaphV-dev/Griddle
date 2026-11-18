@@ -36,18 +36,26 @@ const zoomStyle = computed(() => {
 </script>
 
 <style scoped>
+.game-stage h3 {
+  margin: 0 0 8px;
+  color: #f4f4f1;
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.game-stage .subtitle { margin: 0; color: #929399; font-size: 0.95rem; }
 .zoom-viewport {
-  width: min(250px, 100%);
+  width: min(420px, 80vw);
   aspect-ratio: 1 / 1;
-  margin: 20px auto;
+  margin: 28px auto 8px;
   overflow: hidden;
-  border-radius: 50%;
-  border: 4px solid #e10600;
+  border: 4px solid var(--color-red, #f23b35);
+  border-radius: 9px;
+  background: #101113;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.3);
 }
-
-.zoom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.zoom-image { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 600px) { .zoom-viewport { width: min(300px, 78vw); } }
 </style>
