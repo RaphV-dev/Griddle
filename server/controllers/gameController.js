@@ -14,7 +14,7 @@ exports.getAllDrivers = async (req,res) =>{
 
 exports.getTodayChallenge = async (req,res) => {
     try{
-        const userId = req.user ? req.userId : null;
+        const userId = req.user ? req.user.id : null;
         const today = new Date().toISOString().split('T')[0];
 
         let [challenges] = await db.query(
@@ -55,8 +55,8 @@ exports.getTodayChallenge = async (req,res) => {
             [currentChallenge.read_driver_id]
         );
 
-        const [rebusElements] = await db.query(
-            'SELECT element_order, type, content FROM driver_rebus WHERE driver_id = ? ORDER BY element_order ASC',
+        const [[rebusData]] = await db.query(
+            'SELECT content FROM driver_rebus WHERE driver_id = ?',
             [currentChallenge.rebus_driver_id]
         );
 
@@ -90,7 +90,7 @@ exports.getTodayChallenge = async (req,res) => {
                     clues: readDriverData ? [readDriverData.clue_1, readDriverData.clue_2, readDriverData.clue_3] :[]
                 },
                 rebus :{
-                    elements : rebusElements
+                    content : rebusData ? rebusData.content : ''
                 },
                 zoom: {
                     imageUrl: zoomDriverData ? zoomDriverData.zoom_image_url : null
@@ -108,10 +108,10 @@ exports.getTodayChallenge = async (req,res) => {
 
 exports.validateGuess = async (req,res) => {
     try{
-        const {gameType, guesseDriverId, attemptCount} = req.body;
+        const {gameType, guessedDriverId, attemptsCount} = req.body;
         const today = new Date().toISOString().split('T')[0];
 
-        if (!gameType || !guesseDriverId){
+        if (!gameType || !guessedDriverId){
             return res.status(400).json({message : 'Missing required parameters'});
         }
 
@@ -144,21 +144,21 @@ exports.validateGuess = async (req,res) => {
                 return res.status(400).json({message: 'Invalid game type'});
         }
 
-        const isCorrect = Number(guesseDriverId) === Number(targetDriverId);
+        const isCorrect = Number(guessedDriverId) === Number(targetDriverId);
 
         let score = 0;
         if(isCorrect){
-            const attempts = attemptCount || 1;
+            const attempts = attemptsCount || 1;
             score = Math.max(0, 100-(attempts-1)*15);
         }
 
         let targetDriver = null;
         if(isCorrect){
             const [[driver]] = await db.query(
-                'SELECT id, name, code, nattionality FROM drivers WHERE id = ?',
+                'SELECT id, name, code, nationality FROM drivers WHERE id = ?',
                 [targetDriverId]
             );
-            targetDriver = drivers[0] || null;
+            targetDriver = driver || null;
         }
 
         return res.status(200).json({
@@ -177,12 +177,19 @@ exports.submitDailyResults = async (req,res) => {
         const userId = req.user.id;
         const {readScore, rebusScore, zoomScore, teamScore} = req.body;
         const today = new Date().toISOString().split('T')[0];
+        const [[existing]] = await db.query(
+            'SELECT completed FROM user_daily_results WHERE user_id = ? AND challenge_date = ?',
+            [userId, today]
+        );
+        if (existing && existing.completed) {
+            return res.status(409).json({ message: 'Daily challenge already submitted.' });
+        }
 
         const totalScore = (readScore || 0) + (rebusScore || 0) +(zoomScore || 0) + (teamScore || 0);
 
 
         await db.query(
-            'INSERT INTO user_daily_results (user_id, challenge_date, read_score, rebus_score, zoom_score, team_score, total_score, completed) VALUES (?, ?, ?, ?, ?, ?, ?, TRUE) ON DUPLICATE KEY UPDATE read_score = VALUES(read_score), rebus_score = VALUES(rebus_score), zoom_score = VALUES(zoom_score), team_score = VALUES(team_score, total_score = VALUES(total_score), completed = TRUE',
+            'INSERT INTO user_daily_results (user_id, challenge_date, read_score, rebus_score, zoom_score, team_score, total_score, completed) VALUES (?, ?, ?, ?, ?, ?, ?, TRUE) ON DUPLICATE KEY UPDATE read_score = VALUES(read_score), rebus_score = VALUES(rebus_score), zoom_score = VALUES(zoom_score), team_score = VALUES(team_score), total_score = VALUES(total_score), completed = TRUE',
             [userId, today, readScore || 0, rebusScore || 0, zoomScore || 0, teamScore || 0, totalScore]
         );
 
@@ -195,16 +202,24 @@ exports.submitDailyResults = async (req,res) => {
         let maxStreak = 1;
 
         if (stats.length > 0){
+            const [stats] = await db.query(
+                `SELECT games_played, best_score, average_score, current_streak, max_streak,
+                        DATE_FORMAT(last_played_date, '%Y-%m-%d') AS last_played_date
+                FROM user_stats WHERE user_id = ?`,
+                [userId]
+            );
             const userStat = stats[0];
+            const prevAvg = Number(userStat.average_score) || 0; 
             gamesPlayed = userStat.games_played +1;
             bestScore = Math.max(userStat.best_score, totalScore);
-            averageScore = ((userStat.averageScore * userStat.games_played)+totalScore)/gamesPlayed;
+            averageScore = ((prevAvg * userStat.games_played)+totalScore)/gamesPlayed;
             
-            const lastPlayed = userStat.last_played_date ? new Date(userStat.last_played_date):null;
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate()-1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
-            const lastPlayedStr = lastPlayed ? lastPlayed.toISOString().split('T')[0]:null;
+            
+            const lastPlayedStr = userStat.last_played_date; 
+            const yesterdayDate = new Date(today + 'T00:00:00Z');
+            yesterdayDate.setUTCDate(yesterdayDate.getUTCDate() - 1);
+            const yesterdayStr = yesterdayDate.toISOString().split('T')[0];
+            
 
             if (lastPlayedStr === yesterdayStr){
                 currentStreak = userStat.current_streak + 1;

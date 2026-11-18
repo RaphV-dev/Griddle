@@ -9,6 +9,7 @@
             <router-link to="/">Home</router-link>
             <router-link v-if="isLoggedIn" to="/game">Play</router-link>
             <router-link v-if="isLoggedIn" to="/profile">Profile</router-link>
+            <router-link v-if="isLoggedIn && isAdmin" to="/admin">Admin</router-link>
 
             <template v-if="!isLoggedIn">
                 <router-link to="/login">Log In</router-link>
@@ -27,9 +28,12 @@
     const router = useRouter();
     const route = useRoute();
     const isLoggedIn = ref(false);
+    const isAdmin = ref(false);
 
     const checkAuth = () =>{
         isLoggedIn.value = !!localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        isAdmin.value = user?.role === 'admin';
     };
 
     checkAuth();

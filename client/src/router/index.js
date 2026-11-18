@@ -18,6 +18,12 @@ const routes = [
         name: 'Profile',
         component: () => import('../views/ProfileView.vue'),
         meta: {requiresAuth: true}
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: () => import('../views/AdminView.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
     }
 ];
 
@@ -28,8 +34,13 @@ const router = createRouter({
 
 router.beforeEach((to) => {
     const token = localStorage.getItem('token');
-    if (to.meta.requiresAuth && !token){
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+    if (to.meta.requiresAuth && !token) {
         return '/login';
+    }
+    if (to.meta.requiresAdmin && user?.role !== 'admin') {
+        return '/';
     }
 });
 

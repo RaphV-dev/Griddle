@@ -23,7 +23,7 @@ exports.register = async (req,res) =>{
         const hashePassword = await bcrypt.hash(password, saltRound);
 
         const [result] = await db.query(
-            'INSERT INTO users (username, email, password, role) VALUES ( ?, ?, ?, ?)',[username,email,hashePassword, 'player']
+            'INSERT INTO users (username, email, password, role) VALUES ( ?, ?, ?, ?)',[username,email,hashePassword, 'user']
         );
 
         res.status(201).json({
@@ -51,6 +51,10 @@ exports.login = async (req,res) =>{
 
         const user = users[0];
 
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Incorrect credentials' });
+        }
         const token = jwt.sign(
             {id: user.id, username: user.username, role: user.role},
             process.env.JWT_SECRET || 'defaul_secret_key',
@@ -65,7 +69,6 @@ exports.login = async (req,res) =>{
                 username: user.username,
                 email: user.email,
                 role: user.role,
-                daily_streak: user.daily_streak
             }
         });
     }catch(error){
@@ -74,7 +77,7 @@ exports.login = async (req,res) =>{
     }
 };
 
-exports.getMe = async (req,res) =>{
+/*exports.getMe = async (req,res) =>{
     try {
         const [users] = await db.query(
             'SELECT id, username, email, role, daily_streak, last_played_date, created_at FROM users WHERE id = ?',
@@ -90,4 +93,4 @@ exports.getMe = async (req,res) =>{
         console.error('Profil error : ',error);
         res.status(500).json({message:'Server error.'})
     }
-};
+};*/
