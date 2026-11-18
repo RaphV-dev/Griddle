@@ -150,10 +150,10 @@ import ScoreRecap from '../components/ScoreRecap.vue';
 
 const gameTypes = ['read', 'rebus', 'zoom', 'team'];
 const gameLabels = {
-  read: '1. Read',
-  rebus: '2. Rebus',
-  zoom: '3. Zoom',
-  team: '4. Team'
+  read: '1. Read The Driver',
+  rebus: '2. Decode The Name',
+  zoom: '3. Find The Face',
+  team: '4. Follow The Team'
 };
 
 const loading = ref(true);
