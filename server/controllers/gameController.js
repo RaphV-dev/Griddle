@@ -3,7 +3,7 @@ const db = require('../config/db');
 exports.getAllDrivers = async (req,res) =>{
     try{
         const [drivers] = await db.query(
-            'SELECT id,name,code FROM drivers ORDER BY name ASC'
+            'SELECT id, name, code, zoom_image_url FROM drivers ORDER BY name ASC'
         );
         return res.status(200).json({drivers});
     }catch(error){
