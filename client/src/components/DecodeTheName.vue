@@ -3,21 +3,33 @@
     <h3>Mini-Game 2: Decode the Name</h3>
     <p class="subtitle">Combine the elements below to reveal the driver's name!</p>
     <div class="rebus-container">
-      <div
-        v-for="elem in elements"
-        :key="elem.element_order"
-        class="rebus-item"
-      >
-        <img v-if="elem.type === 'image'" :src="elem.content" alt="Rebus part" class="rebus-img" />
-        <span v-else-if="elem.type === 'emoji'" class="rebus-emoji">{{ elem.content }}</span>
-        <span v-else class="rebus-text">{{ elem.content }}</span>
-      </div>
+      <p v-if="content" class="rebus-text">{{ content }}</p>
+      <p v-else class="no-rebus">No rebus available for this driver.</p>
     </div>
   </div>
 </template>
 
 <script setup>
 defineProps({
-  elements: { type: Array, required: true }
+  content: { type: String, default: '' }
 });
 </script>
+
+<style scoped>
+.rebus-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.rebus-text {
+  font-size: 2.5rem;
+  line-height: 1.4;
+  text-align: center;
+  word-break: break-word;
+}
+
+.no-rebus {
+  color: #888;
+}
+</style>

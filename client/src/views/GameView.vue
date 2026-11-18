@@ -57,7 +57,7 @@
 
         <RebusGame
           v-else-if="currentGameKey === 'rebus'"
-          :elements="challenge.games.rebus.elements"
+          :content="challenge.games.rebus.content"
         />
 
         <ZoomGame
