@@ -32,14 +32,9 @@ import AppNavbar from './components/AppNavbar.vue';
   --font-mono: 'IBM Plex Mono', monospace;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-html {
-  min-width: 320px;
-  background: var(--color-bg);
-}
+html { min-width: 320px; background: var(--color-bg); }
 
 body {
   margin: 0;
@@ -51,29 +46,17 @@ body {
   overflow-wrap: break-word;
 }
 
-button, input, select, textarea {
-  font: inherit;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+img { display: block; max-width: 100%; }
 
 .main-content {
-  width: min(100% - 48px, 1320px);
+  width: min(calc(100% - 80px), 1760px);
   margin: 0 auto;
-  padding: 34px 0 56px;
+  padding: 42px 0 64px;
 }
 
-.game-stage h3 {
-  margin: 0 0 0.4rem;
-  font-size: 1.1rem;
-}
+.game-stage h3 { margin: 0 0 0.4rem; font-size: 1.1rem; }
 
 .game-stage .subtitle {
   margin: 0 0 0.75rem;
@@ -81,9 +64,13 @@ img {
   font-size: 0.9rem;
 }
 
+@media (min-width: 1600px) {
+  .main-content { padding-top: 50px; }
+}
+
 @media (max-width: 640px) {
   .main-content {
-    width: min(100% - 32px, 1320px);
+    width: calc(100% - 32px);
     padding: 24px 0 40px;
   }
 }
