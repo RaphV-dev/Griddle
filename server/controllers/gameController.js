@@ -55,8 +55,8 @@ exports.getTodayChallenge = async (req,res) => {
             [currentChallenge.read_driver_id]
         );
 
-        const [rebusElements] = await db.query(
-            'SELECT element_order, type, content FROM driver_rebus WHERE driver_id = ? ORDER BY element_order ASC',
+        const [[rebusData]] = await db.query(
+            'SELECT content FROM driver_rebus WHERE driver_id = ?',
             [currentChallenge.rebus_driver_id]
         );
 
@@ -90,7 +90,7 @@ exports.getTodayChallenge = async (req,res) => {
                     clues: readDriverData ? [readDriverData.clue_1, readDriverData.clue_2, readDriverData.clue_3] :[]
                 },
                 rebus :{
-                    elements : rebusElements
+                    content : rebusData ? rebusData.content : ''
                 },
                 zoom: {
                     imageUrl: zoomDriverData ? zoomDriverData.zoom_image_url : null
