@@ -58,11 +58,11 @@
     z-index: 20;
     top: 0;
     display: flex;
-    min-height: 58px;
+    min-height: 62px;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 0  max(24px, calc((100vw - 1320px) / 2));
+    padding: 0 max(40px, calc((100vw - 1760px) / 2));
     border-bottom: 1px solid #292a2d;
     background: rgba(16, 17, 19, 0.96);
     backdrop-filter: blur(14px);
@@ -92,16 +92,12 @@
     letter-spacing: -0.02em;
 }
 
-.nav_links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.nav_links { display: flex; align-items: center; gap: 8px; }
 
 .navbar a,
 .btn-logout {
     display: inline-flex;
-    min-height: 58px;
+    min-height: 62px;
     align-items: center;
     justify-content: center;
     padding: 0 13px;
@@ -137,10 +133,7 @@
     cursor: pointer;
 }
 
-.btn-logout:hover {
-    border-color: var(--color-red);
-    color: white;
-}
+.btn-logout:hover { border-color: var(--color-red); color: white; }
 
 @media (max-width: 640px) {
     .navbar {
@@ -148,13 +141,8 @@
         padding: 0 16px;
     }
 
-    .logo strong {
-        font-size: 1.35rem;
-    }
-
-    .nav_links {
-        gap: 0;
-    }
+    .logo strong { font-size: 1.35rem; }
+    .nav_links { gap: 0; }
 
     .navbar a,
     .btn-logout {
@@ -164,8 +152,6 @@
     }
 
     .navbar a.btn-register,
-    .btn-logout {
-        min-height: 32px;
-    }
+    .btn-logout { min-height: 32px; }
 }
 </style>
