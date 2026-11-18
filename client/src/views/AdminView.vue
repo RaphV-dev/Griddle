@@ -1,7 +1,30 @@
 <template>
   <div class="admin-container">
     <h1>Admin Dashboard</h1>
-
+    <button 
+        @click="refreshDashboard" 
+        :disabled="isRefreshing" 
+        class="btn-refresh"
+      >
+        <svg 
+            :class="['refresh-icon', { 'spin': isRefreshing }]" 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            stroke-width="2.5" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"
+        >
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+            <path d="M16 16h5v5" />
+        </svg>
+        {{ isRefreshing ? 'Actualisation...' : 'Refresh' }}
+      </button>
     <p v-if="loading" class="info">Loading admin data...</p>
     <p v-else-if="error" class="error-msg">{{ error }}</p>
 
@@ -140,13 +163,19 @@ import { getAdminDashboard, deleteUserAccount, deleteUserDailyTry } from '../ser
 const router = useRouter();
 const adminData = ref(null);
 const loading = ref(true);
+const isRefreshing = ref(false);
 const error = ref('');
 const actionFeedback = ref('');
 const busyUserId = ref(null);
 
-const loadAdminData = async () => {
-  loading.value = true;
+const loadAdminData = async (isManualRefresh = false) => {
+  if (isManualRefresh) {
+    isRefreshing.value = true;
+  } else {
+    loading.value = true;
+  }
   error.value = '';
+
   try {
     const { data } = await getAdminDashboard();
     adminData.value = data;
@@ -158,7 +187,13 @@ const loadAdminData = async () => {
     error.value = err.response?.data?.message || 'Failed to load admin panel.';
   } finally {
     loading.value = false;
+    isRefreshing.value = false;
   }
+};
+
+const refreshDashboard = async () => {
+  actionFeedback.value = '';
+  await loadAdminData(true);
 };
 
 const handleDeleteDailyTry = async (user) => {
@@ -168,7 +203,7 @@ const handleDeleteDailyTry = async (user) => {
   try {
     const { data } = await deleteUserDailyTry(user.id);
     actionFeedback.value = `${user.username}: ${data.message}`;
-    await loadAdminData();
+    await loadAdminData(true);
   } catch (err) {
     error.value = err.response?.data?.message || 'Could not delete daily try.';
   } finally {
@@ -183,7 +218,7 @@ const handleDeleteUser = async (user) => {
   try {
     const { data } = await deleteUserAccount(user.id);
     actionFeedback.value = `${user.username}: ${data.message}`;
-    await loadAdminData();
+    await loadAdminData(true);
   } catch (err) {
     error.value = err.response?.data?.message || 'Could not delete user.';
   } finally {
@@ -191,7 +226,7 @@ const handleDeleteUser = async (user) => {
   }
 };
 
-onMounted(loadAdminData);
+onMounted(() => loadAdminData(false));
 </script>
 
 <style scoped>
@@ -332,4 +367,33 @@ button:disabled {
 .error-msg { color: #ff4d4d; margin-bottom: 1rem; }
 .success-msg { color: #4cd964; margin-bottom: 1rem; }
 .info { color: #aaa; }
+
+.btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  background: #20202a;
+  color: #fff;
+  border: 1px solid #e10600;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  background: #e10600;
+}
+
+.spin {
+  display: inline-block;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
 </style>
