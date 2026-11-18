@@ -16,20 +16,28 @@ defineProps({
 </script>
 
 <style scoped>
+.game-stage h3 {
+  margin: 0 0 8px;
+  color: #f4f4f1;
+  font-family: var(--font-display, Impact, sans-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.game-stage .subtitle { margin: 0; color: #929399; font-size: 0.95rem; }
 .rebus-container {
   display: flex;
+  min-height: 230px;
+  align-items: center;
   justify-content: center;
-  margin: 20px auto;
+  margin: 28px auto 8px;
+  padding: 30px;
+  border: 1px dashed #45464a;
+  border-radius: 8px;
+  background: #141517;
 }
-
-.rebus-text {
-  font-size: 2.5rem;
-  line-height: 1.4;
-  text-align: center;
-  word-break: break-word;
-}
-
-.no-rebus {
-  color: #888;
-}
+.rebus-text { margin: 0; color: #f4f4f1; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.35; text-align: center; word-break: break-word; }
+.no-rebus { color: #929399; }
+@media (max-width: 600px) { .rebus-container { min-height: 170px; padding: 18px; } }
 </style>
