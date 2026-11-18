@@ -49,8 +49,8 @@ const handleLogin = async ()=>{
 <style scoped>
 .auth-container{
     max-width:400px;
-    margin:3rem auto;
-    padding: 2rem;
+    margin:1.5rem auto;
+    padding: 1.5rem;
     background: #20202a;
     color:#fff;
     border-radius:8px;
@@ -66,6 +66,7 @@ const handleLogin = async ()=>{
 
 .form-group input{
     width:100%;
+    min-height: 44px;
     padding: 0.6rem;
     border-radius:4px;
     border:1px solid #444;
@@ -75,6 +76,7 @@ const handleLogin = async ()=>{
 
 button{
     width:100%;
+    min-height: 44px;
     padding:0.7rem;
     background: #e10600;
     color:white;

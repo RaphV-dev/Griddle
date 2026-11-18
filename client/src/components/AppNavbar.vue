@@ -55,32 +55,61 @@
 <style scoped>
 .navbar{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    gap: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
     background-color: #15151e;
     color: #ffffff;
 }
 
-.navbar a {
-    color: #ffffff;
-    text-decoration: none;
-    margin-left: 1.5rem;
+.nav_links{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
 }
 
-.btn-register{
+.navbar a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navbar .logo a {
+    padding: 0;
+}
+
+.navbar a.btn-register{
     background-color: #e10600;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
     border-radius: 4px;
 }
 
 .btn-logout {
+    min-height: 44px;
     background:transparent;
     border: 1px solid #e10600;
     color: #e10600;
-    padding: 0.5rem 1rem;
-    margin-left: 1.5rem;
+    padding: 0 1rem;
     cursor: pointer;
     border-radius: 4px;
+}
+
+@media (min-width: 641px){
+    .navbar{
+        padding: 0.5rem 2rem;
+    }
+}
+
+/* Mobile : le logo reste en haut, les liens passent sur toute la largeur en dessous */
+@media (max-width: 640px){
+    .nav_links{
+        width: 100%;
+    }
 }
 </style>

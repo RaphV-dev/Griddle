@@ -23,3 +23,43 @@ defineProps({
   completed: { type: Boolean, default: false }
 });
 </script>
+
+<style scoped>
+.clues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.clue-card {
+  padding: 12px;
+  border: 1px dashed #bbb;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #777;
+}
+
+.clue-card.revealed {
+  border: 1px solid #e10600;
+  background: #fff5f5;
+  color: #111;
+}
+
+.clue-card p {
+  margin: 6px 0 0;
+}
+
+.clue-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #e10600;
+}
+
+.hidden-clue {
+  font-style: italic;
+  color: #888;
+}
+</style>

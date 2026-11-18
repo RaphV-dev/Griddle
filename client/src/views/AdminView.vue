@@ -71,7 +71,8 @@
       <!-- 3. Top 5 Users -->
       <section class="card">
         <h2>Top 5 Players</h2>
-        <table v-if="adminData.stats.top5Users.length > 0" class="admin-table">
+        <div v-if="adminData.stats.top5Users.length > 0" class="table-wrapper">
+        <table class="admin-table">
           <thead>
             <tr>
               <th>#</th>
@@ -93,6 +94,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
         <p v-else class="info">No completed games yet.</p>
       </section>
 
@@ -232,16 +234,28 @@ onMounted(() => loadAdminData(false));
 <style scoped>
 .admin-container {
   max-width: 950px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: 1rem auto;
+  padding: 0;
   color: #fff;
 }
 
 .card {
   background: #20202a;
   border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 600px) {
+  .admin-container {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .card h2 {
@@ -286,6 +300,7 @@ onMounted(() => loadAdminData(false));
 
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-table {
@@ -296,8 +311,16 @@ onMounted(() => loadAdminData(false));
 
 .admin-table th,
 .admin-table td {
-  padding: 0.75rem;
+  padding: 0.6rem 0.5rem;
   border-bottom: 1px solid #333;
+  white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem;
+  }
 }
 
 .admin-table th {
@@ -341,6 +364,7 @@ onMounted(() => loadAdminData(false));
 
 .btn-warning,
 .btn-danger {
+  min-height: 40px;
   padding: 0.45rem 0.8rem;
   border: none;
   border-radius: 4px;

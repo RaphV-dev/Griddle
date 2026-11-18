@@ -49,17 +49,53 @@ defineEmits(['close']);
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  z-index: 1000;
 }
 
+/* margin:auto centre la carte tout en gardant le haut accessible si elle dépasse l'écran */
 .modal-card {
   background: white;
   color: black;
-  padding: 30px;
+  margin: auto;
+  padding: 24px 20px;
   border-radius: 12px;
   text-align: center;
   max-width: 400px;
   width: 100%;
+}
+
+.final-scores {
+  display: grid;
+  gap: 6px;
+  margin: 16px 0;
+  text-align: left;
+}
+
+.final-total {
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.final-total span {
+  color: #e10600;
+}
+
+.user-stats-summary p {
+  margin: 4px 0;
+}
+
+.btn-close {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 16px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #e10600;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
