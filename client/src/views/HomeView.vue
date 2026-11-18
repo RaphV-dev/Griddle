@@ -34,13 +34,6 @@
           </div>
         </router-link>
 
-        <div class="daily-note">
-          <span class="note-symbol" aria-hidden="true">✳</span>
-          <div>
-            <strong>ONE GRID. FOUR TESTS.</strong>
-            <p>Put your Formula 1 knowledge to the test, one challenge at a time.</p>
-          </div>
-        </div>
       </aside>
     </section>
 
@@ -210,6 +203,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
 }
 
 .section-heading {
@@ -219,10 +213,10 @@
 
 .daily-card {
   display: flex;
-  min-height: 190px;
+  min-height: 390px;
   flex-direction: column;
   justify-content: space-between;
-  padding: 22px;
+  padding: clamp(24px, 2.4vw, 36px);
   border: 1px solid var(--color-red);
   border-radius: 9px;
   background: var(--color-red);
@@ -245,7 +239,7 @@
 
 .daily-title {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
   font-weight: 800;
   line-height: 0.95;
   text-transform: uppercase;
@@ -257,8 +251,9 @@
 }
 
 .daily-card p {
-  margin: 18px 0;
-  font-size: 0.9rem;
+  margin: 24px 0;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .daily-meta {
@@ -266,7 +261,7 @@
   justify-content: space-between;
   gap: 10px;
   color: rgba(255,255,255,0.86);
-  font-size: 0.53rem;
+  font-size: 0.58rem;
 }
 
 .daily-note {
@@ -411,16 +406,12 @@
   }
 
   .daily-card {
-    min-height: 164px;
-    padding: 19px;
+    min-height: 190px;
+    padding: 22px;
   }
 
   .daily-title {
     font-size: 2rem;
-  }
-
-  .daily-note {
-    display: none;
   }
 
   .games-section {
