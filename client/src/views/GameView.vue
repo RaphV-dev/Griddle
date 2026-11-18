@@ -69,7 +69,7 @@
 
         <TeamGame
           v-else-if="currentGameKey === 'team'"
-          :teams="challenge.games.team.teams"
+          :image-url="challenge.games.team.imageUrl"
         />
 
         <!-- Feedback & Guesses History -->
