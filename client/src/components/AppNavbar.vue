@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="logo">
             <router-link to="/">
-            <strong>GRIDdle</strong>
+            <strong>GRID IQ</strong>
         </router-link>
         </div>
         <div class="nav_links">
@@ -53,63 +53,119 @@
     };
 </script>
 <style scoped>
-.navbar{
+.navbar {
+    position: sticky;
+    z-index: 20;
+    top: 0;
     display: flex;
-    flex-wrap: wrap;
+    min-height: 58px;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    gap: 0.25rem 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #15151e;
-    color: #ffffff;
+    gap: 16px;
+    padding: 0  max(24px, calc((100vw - 1320px) / 2));
+    border-bottom: 1px solid #292a2d;
+    background: rgba(16, 17, 19, 0.96);
+    backdrop-filter: blur(14px);
 }
 
-.nav_links{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.25rem 0.5rem;
-}
-
-.navbar a {
+.logo a {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
-    padding: 0 0.75rem;
-    color: #ffffff;
+    gap: 10px;
+    color: #f4f4f1;
     text-decoration: none;
 }
 
-.navbar .logo a {
-    padding: 0;
+.logo a::before {
+    width: 5px;
+    height: 22px;
+    background: var(--color-red);
+    content: '';
+    transform: skew(-16deg);
 }
 
-.navbar a.btn-register{
-    background-color: #e10600;
-    padding: 0 1rem;
-    border-radius: 4px;
+.logo strong {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.nav_links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar a,
+.btn-logout {
+    display: inline-flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: #929399;
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition: color 160ms ease, border-color 160ms ease;
+}
+
+.navbar a:hover,
+.navbar a.router-link-active {
+    border-bottom-color: var(--color-red);
+    color: #f4f4f1;
+}
+
+.navbar a.btn-register {
+    min-height: 34px;
+    padding: 0 15px;
+    border: 1px solid var(--color-red);
+    border-radius: 5px;
+    background: var(--color-red);
+    color: white;
 }
 
 .btn-logout {
-    min-height: 44px;
-    background:transparent;
-    border: 1px solid #e10600;
-    color: #e10600;
-    padding: 0 1rem;
+    min-height: 34px;
+    padding: 0 14px;
+    border: 1px solid #45464a;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
-@media (min-width: 641px){
-    .navbar{
-        padding: 0.5rem 2rem;
+.btn-logout:hover {
+    border-color: var(--color-red);
+    color: white;
+}
+
+@media (max-width: 640px) {
+    .navbar {
+        min-height: 56px;
+        padding: 0 16px;
     }
-}
 
-/* Mobile : le logo reste en haut, les liens passent sur toute la largeur en dessous */
-@media (max-width: 640px){
-    .nav_links{
-        width: 100%;
+    .logo strong {
+        font-size: 1.35rem;
+    }
+
+    .nav_links {
+        gap: 0;
+    }
+
+    .navbar a,
+    .btn-logout {
+        min-height: 56px;
+        padding: 0 8px;
+        font-size: 0.7rem;
+    }
+
+    .navbar a.btn-register,
+    .btn-logout {
+        min-height: 32px;
     }
 }
 </style>
