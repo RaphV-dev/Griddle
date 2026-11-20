@@ -254,17 +254,3 @@ All routes are prefixed with `/api`. Protected routes expect the header `Authori
 | `GET` | `/health` | Checks that the API is running |
 
 ---
-
-## Adding images
-
-Driver images are served by the client from `client/public/`:
-
-- **`client/public/zoom/`**: portrait used by *Find the Face*, referenced in `drivers.zoom_image_url`.
-- **`client/public/teams/`**: team image used by *Follow the Team*, referenced in `drivers.teams_image_url`.
-
-After adding an image, link it to the driver:
-
-```sql
-UPDATE drivers SET teams_image_url = '/teams/hamilton.png' WHERE code = 'HAM';
-UPDATE drivers SET zoom_image_url  = '/zoom/hamilton.jpg'  WHERE code = 'HAM';
-```
