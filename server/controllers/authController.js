@@ -19,6 +19,10 @@ exports.register = async (req,res) =>{
             return res.status(409).json({message : 'Username or email already used'});
         }
 
+        if (password.length < 8){
+            return res.status(400).json({message: 'Password must be at least 8 characters.'})
+        }
+
         const saltRound = 10;
         const hashePassword = await bcrypt.hash(password, saltRound);
 
@@ -76,21 +80,3 @@ exports.login = async (req,res) =>{
         res.status(500).json({message: 'Server error while trying to connect.'});
     }
 };
-
-/*exports.getMe = async (req,res) =>{
-    try {
-        const [users] = await db.query(
-            'SELECT id, username, email, role, daily_streak, last_played_date, created_at FROM users WHERE id = ?',
-            [req.user.id]
-        );
-
-        if (user.length === 0){
-            return res.status(404).json({message: 'User not found.'})
-        }
-
-        res.json(users);
-    }catch(error){
-        console.error('Profil error : ',error);
-        res.status(500).json({message:'Server error.'})
-    }
-};*/

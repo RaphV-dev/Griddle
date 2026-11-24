@@ -41,7 +41,6 @@ exports.getDashboard = async (req, res) => {
 
         const played = Boolean(todayResult && todayResult.completed);
 
-        // La streak stockée n'est valide que si la dernière partie date d'aujourd'hui ou d'hier
         const streakIsAlive = stats && (stats.last_played_date === today || stats.last_played_date === yesterday);
 
         return res.status(200).json({
