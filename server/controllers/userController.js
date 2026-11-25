@@ -96,7 +96,6 @@ exports.changePassword = async (req, res) => {
 
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
-            // 400 et non 401/403, pour ne pas déclencher un éventuel logout automatique côté front
             return res.status(400).json({ message: 'Current password is incorrect.' });
         }
 

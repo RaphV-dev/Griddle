@@ -2,20 +2,17 @@ const db = require('../config/db');
 
 const getToday = () => new Date().toISOString().split('T')[0];
 
-// 1. Statistiques globales, Top 5, réponses du jour et liste des joueurs
+
 exports.getAdminDashboard = async (req, res) => {
     try {
         const today = getToday();
 
-        // Nombre total d'utilisateurs
         const [[{ totalUsers }]] = await db.query('SELECT COUNT(*) AS totalUsers FROM users');
 
-        // Moyenne des scores globaux (sur les parties complétées)
         const [[{ globalAverageScore }]] = await db.query(
             'SELECT COALESCE(AVG(total_score), 0) AS globalAverageScore FROM user_daily_results WHERE completed = TRUE'
         );
 
-        // Top 5 utilisateurs (classés par score moyen puis meilleur score)
         const [topUsers] = await db.query(`
             SELECT u.id, u.username, u.email, 
                    ROUND(s.average_score, 1) AS average_score, 
@@ -27,7 +24,6 @@ exports.getAdminDashboard = async (req, res) => {
             LIMIT 5
         `);
 
-        // Réponses des 4 mini-jeux du jour
         const [[todayChallenge]] = await db.query(
             'SELECT * FROM daily_challenges WHERE challenge_date = ?',
             [today]
@@ -49,7 +45,6 @@ exports.getAdminDashboard = async (req, res) => {
             };
         }
 
-        // Liste des utilisateurs avec leur statut de jeu du jour (pour les contrôles)
         const [users] = await db.query(`
             SELECT u.id, u.username, u.email, u.role, u.created_at,
                    s.games_played, ROUND(COALESCE(s.average_score, 0), 1) AS average_score,
@@ -76,7 +71,6 @@ exports.getAdminDashboard = async (req, res) => {
     }
 };
 
-// 2. Supprimer un utilisateur (et ses données liées)
 exports.deleteUser = async (req, res) => {
     const connection = await db.getConnection();
     try {
@@ -106,7 +100,6 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-// 3. Supprimer l'essai du jour d'un utilisateur et recalculer ses stats
 exports.deleteUserDailyTry = async (req, res) => {
     const connection = await db.getConnection();
     try {
@@ -125,7 +118,6 @@ exports.deleteUserDailyTry = async (req, res) => {
             return res.status(404).json({ message: 'No daily try found for this user today.' });
         }
 
-        // Recalculer user_stats à partir de l'historique restant
         const [remainingGames] = await connection.query(
             `SELECT total_score, DATE_FORMAT(challenge_date, '%Y-%m-%d') AS play_date
              FROM user_daily_results
@@ -143,7 +135,6 @@ exports.deleteUserDailyTry = async (req, res) => {
             const bestScore = Math.max(...remainingGames.map(g => g.total_score));
             const lastPlayedDate = remainingGames[remainingGames.length - 1].play_date;
 
-            // Recalcul des streaks
             let maxStreak = 1;
             let currentRun = 1;
             for (let i = 1; i < remainingGames.length; i++) {

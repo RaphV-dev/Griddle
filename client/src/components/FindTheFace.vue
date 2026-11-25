@@ -22,7 +22,7 @@ const props = defineProps({
   completed: { type: Boolean, default: false }
 });
 
-// Progressive CSS zoom: scales down from 3.5x to 1.0x over the attempts
+
 const zoomStyle = computed(() => {
   if (props.completed) {
     return { transform: 'scale(1)', transition: 'transform 0.5s ease' };

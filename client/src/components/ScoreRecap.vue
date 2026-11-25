@@ -29,11 +29,11 @@
 defineProps({
   scores: {
     type: Object,
-    required: true // { read, rebus, zoom, team }
+    required: true 
   },
   summary: {
     type: Object,
-    default: null // { totalScore, currentStreak, bestScore }
+    default: null 
   }
 });
 

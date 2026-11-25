@@ -187,7 +187,6 @@ const submitting = ref(false);
 const showSummaryModal = ref(false);
 const summaryData = ref(null);
 
-// Game state tracking
 const gameStates = ref({
   read: { attempts: 1, completed: false, score: 0, guesses: [], targetDriver: null },
   rebus: { attempts: 1, completed: false, score: 0, guesses: [], targetDriver: null },
@@ -195,7 +194,7 @@ const gameStates = ref({
   team: { attempts: 1, completed: false, score: 0, guesses: [], targetDriver: null }
 });
 
-// Autocomplete filtering
+
 const filteredDrivers = computed(() => {
   if (!searchQuery.value) return [];
   const query = searchQuery.value.toLowerCase();
@@ -204,7 +203,7 @@ const filteredDrivers = computed(() => {
   ).slice(0, 5);
 });
 
-// Fetch driver list and daily challenge on mount
+
 onMounted(async () => {
   await Promise.all([fetchDrivers(), fetchDailyChallenge()]);
 });
@@ -287,7 +286,7 @@ const submitGuess = async () => {
       currentState.attempts += 1;
     }
 
-    // Reset selection input
+    
     selectedDriver.value = null;
     searchQuery.value = '';
   } catch (err) {
@@ -301,7 +300,6 @@ const nextGame = async () => {
   if (currentGameIndex.value < 3) {
     currentGameIndex.value += 1;
   } else {
-    // Submit final scores to backend
     await submitFinalDailyScore();
   }
 };

@@ -132,7 +132,6 @@ const loadDashboard = async () => {
         dashboard.value = response.data;
     } catch (err) {
         const status = err.response?.status;
-        // Token expiré ou invalide : on déconnecte
         if (status === 401 || status === 403) {
             logout();
             return;
